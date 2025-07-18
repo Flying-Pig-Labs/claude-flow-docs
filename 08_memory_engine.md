@@ -14,6 +14,103 @@ Traditional AI assistants suffer from digital amnesia—each session starts fres
 - **Pattern Recognition**: Automatic extraction of successful strategies
 - **Contextual Retrieval**: Finding relevant information based on current needs
 
+### Memory Engine Architecture
+
+```mermaid
+classDiagram
+    class MemoryEngine {
+        -MemoryStore primaryStore
+        -CacheLayer cache
+        -IndexManager indexes
+        -SubscriptionManager subscriptions
+        -Serializer serializer
+        +initialize(config: MemoryConfig): void
+        +store(key: String, value: Any): void
+        +retrieve(key: String): Any
+        +query(pattern: Query): Result[]
+        +subscribe(pattern: String, callback: Function): Subscription
+        +createSnapshot(): Snapshot
+        +restore(snapshot: Snapshot): void
+    }
+    
+    class MemoryStore {
+        <<interface>>
+        +connect(): Promise~void~
+        +disconnect(): Promise~void~
+        +get(key: String): Promise~Any~
+        +set(key: String, value: Any): Promise~void~
+        +delete(key: String): Promise~void~
+        +scan(pattern: String): Promise~String[]~
+        +transaction(ops: Operation[]): Promise~void~
+    }
+    
+    class SQLiteMemoryStore {
+        -Database db
+        -ConnectionPool pool
+        -SchemaManager schema
+        -WALManager wal
+        +connect(): Promise~void~
+        +get(key: String): Promise~Any~
+        +set(key: String, value: Any): Promise~void~
+        +transaction(ops: Operation[]): Promise~void~
+        -ensureTable(namespace: String): void
+        -optimize(): void
+    }
+    
+    class CacheLayer {
+        -Map~String,CacheEntry~ cache
+        -LRUPolicy evictionPolicy
+        -Integer maxSize
+        -Integer ttl
+        +get(key: String): Any
+        +set(key: String, value: Any, ttl?: Integer): void
+        +invalidate(pattern: String): void
+        +clear(): void
+        +getStats(): CacheStats
+    }
+    
+    class IndexManager {
+        -Map~String,Index~ indexes
+        -IndexBuilder builder
+        +createIndex(field: String, type: IndexType): void
+        +query(index: String, value: Any): String[]
+        +updateIndex(key: String, oldValue: Any, newValue: Any): void
+        +rebuildIndex(name: String): void
+        +getIndexStats(): IndexStats
+    }
+    
+    class SubscriptionManager {
+        -Map~String,Set~Handler~~ subscriptions
+        -EventEmitter emitter
+        -PatternMatcher matcher
+        +subscribe(pattern: String, handler: Handler): String
+        +unsubscribe(id: String): void
+        +notify(key: String, event: Event): void
+        +getActiveSubscriptions(): Subscription[]
+    }
+    
+    class MemoryTransaction {
+        -List~Operation~ operations
+        -TransactionState state
+        -RollbackManager rollback
+        +add(op: Operation): void
+        +commit(): Promise~void~
+        +rollback(): Promise~void~
+        +validate(): boolean
+    }
+    
+    MemoryEngine "1" --> "1" MemoryStore : uses
+    MemoryEngine "1" --> "1" CacheLayer : caches with
+    MemoryEngine "1" --> "1" IndexManager : indexes with
+    MemoryEngine "1" --> "1" SubscriptionManager : notifies via
+    MemoryStore <|.. SQLiteMemoryStore : implements
+    MemoryEngine "1" --> "*" MemoryTransaction : executes
+    
+    note for MemoryEngine "Central memory management\nwith caching and indexing"
+    note for SQLiteMemoryStore "Default persistent storage\nwith WAL for performance"
+    note for SubscriptionManager "Real-time change notifications\nfor reactive updates"
+```
+
 ### The 12-Table Schema
 
 At the heart of the memory engine lies a carefully designed SQLite schema with 12 specialized tables, each optimized for specific access patterns and use cases:
@@ -345,6 +442,82 @@ const suggestion = await memory.suggestApproach(task);
 // Returns: "Use TDD + Parallel pattern (85% similarity to previous success)"
 ```
 
+### Event-Driven Memory Architecture
+
+The memory system uses event sourcing for complete auditability and replay capabilities:
+
+```mermaid
+classDiagram
+    class EventDrivenMemory {
+        -EventStore eventStore
+        -EventProcessor processor
+        -ProjectionEngine projections
+        -SnapshotManager snapshots
+        +append(event: Event): void
+        +replay(from: Timestamp): void
+        +project(projection: Projection): View
+        +snapshot(streamId: String): void
+    }
+    
+    class Event {
+        +String id
+        +String streamId
+        +String type
+        +Any payload
+        +Timestamp timestamp
+        +Map~String,Any~ metadata
+    }
+    
+    class EventStore {
+        -Storage storage
+        -EventSerializer serializer
+        -ConcurrencyControl concurrency
+        +append(event: Event): void
+        +read(streamId: String, from: Integer): Event[]
+        +subscribe(stream: String, handler: Handler): void
+        +createSnapshot(streamId: String): Snapshot
+    }
+    
+    class ProjectionEngine {
+        -Map~String,Projection~ projections
+        -StateBuilder stateBuilder
+        -CatchUpSubscription catchUp
+        +register(projection: Projection): void
+        +rebuild(projectionId: String): void
+        +getState(projectionId: String): State
+        +pauseProjection(id: String): void
+    }
+    
+    class EventProcessor {
+        -HandlerRegistry handlers
+        -ErrorHandler errorHandler
+        -RetryPolicy retry
+        +register(eventType: String, handler: Handler): void
+        +process(event: Event): void
+        +handleError(error: Error, event: Event): void
+        +reprocess(events: Event[]): void
+    }
+    
+    class MemoryProjection {
+        -String id
+        -ProjectionState state
+        -EventHandler handler
+        +when(event: Event): void
+        +getState(): State
+        +reset(): void
+    }
+    
+    EventDrivenMemory "1" --> "1" EventStore : stores in
+    EventDrivenMemory "1" --> "1" EventProcessor : processes with
+    EventDrivenMemory "1" --> "1" ProjectionEngine : projects via
+    EventStore "1" --> "*" Event : contains
+    ProjectionEngine "1" --> "*" MemoryProjection : manages
+    EventProcessor "1" --> "*" Event : processes
+    
+    note for EventDrivenMemory "Event sourcing for complete\naudit trail and replay"
+    note for ProjectionEngine "Creates materialized views\nfrom event streams"
+```
+
 ### Use Cases in Action
 
 #### Use Case 1: Architecture Evolution
@@ -433,6 +606,76 @@ The memory engine roadmap includes:
 3. **Predictive Caching**: AI-driven cache warming
 4. **Memory Synthesis**: Combining memories to create new insights
 5. **Quantum Storage**: Preparing for quantum memory systems
+
+### Memory-Neural Integration
+
+The memory engine seamlessly integrates with the neural learning system for continuous improvement:
+
+```mermaid
+classDiagram
+    class MemoryNeuralBridge {
+        -MemoryEngine memory
+        -NeuralSystem neural
+        -DataPipeline pipeline
+        -SyncManager sync
+        +initialize(): void
+        +capturePattern(event: Event): void
+        +learnFromHistory(): void
+        +applyLearning(context: Context): Recommendation
+        +synchronize(): void
+    }
+    
+    class PatternMemoryStore {
+        -MemoryStore store
+        -PatternIndex index
+        -TemporalAnalyzer temporal
+        +storePattern(pattern: Pattern): void
+        +queryPatterns(criteria: Criteria): Pattern[]
+        +analyzeTemporalPatterns(): TemporalPattern[]
+        +getPatternEvolution(id: String): Evolution
+    }
+    
+    class LearningMemoryCache {
+        -CacheLayer cache
+        -PredictionCache predictions
+        -ModelCache models
+        +cachePrediction(input: Any, output: Prediction): void
+        +getCachedPrediction(input: Any): Prediction
+        +cacheModel(model: Model): void
+        +invalidateStale(): void
+    }
+    
+    class HistoricalDataManager {
+        -TimeSeriesStore timeseries
+        -AggregationEngine aggregator
+        -RetentionPolicy retention
+        +record(metric: Metric): void
+        +aggregate(period: Period): AggregatedData
+        +query(timeRange: TimeRange): TimeSeries
+        +cleanup(): void
+    }
+    
+    class AdaptiveLearningLoop {
+        -FeedbackCollector feedback
+        -ModelUpdater updater
+        -PerformanceMonitor monitor
+        -RetrainingScheduler scheduler
+        +collectFeedback(outcome: Outcome): void
+        +evaluatePerformance(): Performance
+        +triggerRetraining(): void
+        +updateModels(feedback: Feedback[]): void
+    }
+    
+    MemoryNeuralBridge "1" --> "1" MemoryEngine : reads from
+    MemoryNeuralBridge "1" --> "1" NeuralSystem : learns with
+    MemoryNeuralBridge "1" --> "1" PatternMemoryStore : stores patterns
+    MemoryNeuralBridge "1" --> "1" LearningMemoryCache : caches results
+    MemoryNeuralBridge "1" --> "1" HistoricalDataManager : tracks history
+    MemoryNeuralBridge "1" --> "1" AdaptiveLearningLoop : improves via
+    
+    note for MemoryNeuralBridge "Integrates memory and learning\nfor continuous improvement"
+    note for AdaptiveLearningLoop "Closed-loop learning from\nreal-world outcomes"
+```
 
 ### The Living Knowledge Base
 

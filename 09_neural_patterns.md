@@ -67,6 +67,100 @@ This performance enables real-time pattern learning without impacting task execu
 
 Claude Flow's neural system consists of specialized models, each focused on different aspects of intelligent behavior:
 
+```mermaid
+classDiagram
+    class NeuralSystem {
+        -ModelRegistry models
+        -PatternAnalyzer analyzer
+        -LearningEngine learner
+        -PerformanceTracker tracker
+        -FeatureExtractor extractor
+        +initialize(config: NeuralConfig): void
+        +train(data: TrainingData): Model
+        +predict(input: Any): Prediction
+        +analyze(pattern: Pattern): Analysis
+        +optimize(metric: Metric): void
+        +exportModel(name: String): ModelExport
+    }
+    
+    class Model {
+        <<abstract>>
+        #String id
+        #ModelType type
+        #ModelState state
+        #Hyperparameters params
+        +train(data: TrainingData): void
+        +predict(input: Any): Prediction
+        +evaluate(testData: TestData): Metrics
+        +save(path: String): void
+        +load(path: String): void
+    }
+    
+    class TopologyPredictor {
+        -FeatureEncoder encoder
+        -NeuralNetwork network
+        -HistoryBuffer history
+        +extractFeatures(task: Task): Features
+        +predict(features: Features): TopologyScore[]
+        +update(outcome: Outcome): void
+        +getConfidence(): Float
+    }
+    
+    class PatternRecognizer {
+        -PatternLibrary library
+        -SimilarityMeasure similarity
+        -ClusteringEngine clusterer
+        +recognize(data: Any): Pattern[]
+        +addPattern(pattern: Pattern): void
+        +findSimilar(pattern: Pattern): Pattern[]
+        +cluster(patterns: Pattern[]): Cluster[]
+    }
+    
+    class PerformanceOptimizer {
+        -MetricCollector collector
+        -OptimizationStrategy strategy
+        -ParameterTuner tuner
+        +collect(metric: Metric): void
+        +analyze(): PerformanceReport
+        +optimize(target: OptimizationTarget): Parameters
+        +predict(params: Parameters): Performance
+    }
+    
+    class LearningEngine {
+        -TrainingPipeline pipeline
+        -DataPreprocessor preprocessor
+        -ModelValidator validator
+        -HyperparameterTuner tuner
+        +createPipeline(config: PipelineConfig): Pipeline
+        +trainModel(data: Data, model: Model): TrainedModel
+        +crossValidate(model: Model, data: Data): ValidationResult
+        +tuneHyperparameters(model: Model): Hyperparameters
+    }
+    
+    class FeatureExtractor {
+        -FeatureEngineers engineers
+        -Transformers transformers
+        -Scalers scalers
+        +extract(raw: Any): Features
+        +transform(features: Features): TransformedFeatures
+        +scale(features: Features): ScaledFeatures
+        +select(features: Features, k: Integer): Features
+    }
+    
+    Model <|-- TopologyPredictor : extends
+    Model <|-- PatternRecognizer : extends
+    Model <|-- PerformanceOptimizer : extends
+    
+    NeuralSystem "1" --> "*" Model : manages
+    NeuralSystem "1" --> "1" LearningEngine : trains with
+    NeuralSystem "1" --> "1" FeatureExtractor : processes with
+    LearningEngine "1" --> "*" Model : trains
+    
+    note for NeuralSystem "ML-powered system optimization\nand pattern learning"
+    note for TopologyPredictor "Predicts optimal topology\nfor given tasks"
+    note for LearningEngine "Handles model training\nand validation pipeline"
+```
+
 #### Core Recognition Models
 
 **1. Task Complexity Analyzer**
