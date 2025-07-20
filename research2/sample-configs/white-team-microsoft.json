@@ -1,0 +1,115 @@
+{
+  "id": "sample-white-001",
+  "timestamp": "2024-01-15T12:00:00Z",
+  "team": "white",
+  "templateId": 3,
+  "companyName": "Microsoft",
+  "swarmConfig": {
+    "maxAgents": 12,
+    "timeout": 120,
+    "strategy": "exploration",
+    "topology": "hierarchical",
+    "parallel": true,
+    "objective": "Identify whitespace opportunities in Microsoft ecosystem for low-cost, high-impact market entry",
+    "metadata": {
+      "team": "white",
+      "submissionId": "sample-white-001",
+      "customizations": {
+        "companyName": "Microsoft",
+        "opportunityTypes": [
+          "integration_gaps",
+          "workflow_automation",
+          "vertical_solutions",
+          "platform_extensions",
+          "data_opportunities"
+        ],
+        "targetCustomerSize": ["enterprise", "mid_market", "smb"],
+        "businessModelPreference": ["saas_subscription", "usage_based", "marketplace"],
+        "technicalApproach": "api_only",
+        "marketEntrySpeed": "3_months",
+        "competitiveLandscape": "low_competition",
+        "successMetrics": ["revenue", "users", "strategic", "ecosystem"],
+        "riskTolerance": 4,
+        "minimumOpportunitySize": "10m",
+        "ecosystemIntegration": [
+          "native_integration",
+          "api_access",
+          "marketplace",
+          "partner_program"
+        ],
+        "customSearchAreas": ["Teams", "Azure", "Office365", "PowerPlatform", "Dynamics"]
+      }
+    }
+  },
+  "researchConfig": {
+    "baseTemplate": 3,
+    "dynamicPrompts": [
+      "Include experimental and unproven market opportunities with high potential.",
+      "Focus on opportunities that extend the platform ecosystem.",
+      "Prioritize enterprise-grade solutions with compliance and security features.",
+      "Analyze opportunities in: Teams, Azure, Office365, PowerPlatform, Dynamics"
+    ],
+    "focusAreas": [
+      "integration_gaps",
+      "workflow_automation",
+      "vertical_solutions",
+      "platform_extensions",
+      "data_opportunities",
+      "models:saas_subscription,usage_based,marketplace"
+    ],
+    "constraints": {
+      "entrySpeed": "3_months",
+      "riskLevel": 4,
+      "minOpportunitySize": "10m",
+      "technicalApproach": "api_only"
+    },
+    "outputRequirements": {
+      "format": "comprehensive-markdown",
+      "sections": [
+        "executive-summary",
+        "detailed-analysis",
+        "recommendations",
+        "grading-matrix",
+        "opportunity-matrix",
+        "go-to-market-strategy"
+      ],
+      "visualizations": true,
+      "exportFormats": ["md", "json", "pdf"],
+      "marketMaps": true
+    }
+  },
+  "gradingConfig": {
+    "weights": {
+      "market_potential": 0.39,
+      "competitive_advantage": 0.25,
+      "implementation_feasibility": 0.25,
+      "strategic_value": 0.28
+    },
+    "thresholds": {
+      "excellent": 8.0,
+      "good": 6.5,
+      "fair": 5.0,
+      "poor": 3.5
+    },
+    "customCriteria": [
+      {
+        "name": "ecosystem_fit",
+        "weight": 0.15,
+        "description": "Integration with existing ecosystem"
+      }
+    ]
+  },
+  "executionConfig": {
+    "environment": "production",
+    "githubRepo": {
+      "create": true,
+      "name": "microsoft-white-research-20240115",
+      "visibility": "private",
+      "template": "competitive-research-white"
+    },
+    "notifications": {
+      "webhook": "https://hooks.example.com/claude-flow",
+      "email": "product-team@example.com"
+    }
+  }
+}

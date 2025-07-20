@@ -1,0 +1,100 @@
+{
+  "id": "sample-red-001",
+  "timestamp": "2024-01-15T10:00:00Z",
+  "team": "red",
+  "templateId": 1,
+  "companyName": "Salesforce",
+  "swarmConfig": {
+    "maxAgents": 8,
+    "timeout": 90,
+    "strategy": "research",
+    "topology": "hierarchical",
+    "parallel": true,
+    "objective": "Analyze Salesforce to identify features for market disruption",
+    "metadata": {
+      "team": "red",
+      "submissionId": "sample-red-001",
+      "customizations": {
+        "companyName": "Salesforce",
+        "analysisFocus": ["feature_extraction", "pricing_disruption", "segment_analysis"],
+        "marketScope": "global",
+        "disruptionTimeline": 6,
+        "investmentRange": ["small", "medium"],
+        "targetMarketSize": ["hundred_million", "billion_plus"],
+        "competitiveIntensity": "low_competition",
+        "customKeywords": ["CRM", "automation", "integration", "workflow"],
+        "industryVerticals": ["technology", "finance", "healthcare"],
+        "disruptionStrategy": "price"
+      }
+    }
+  },
+  "researchConfig": {
+    "baseTemplate": 1,
+    "dynamicPrompts": [
+      "Focus heavily on analyzing revenue streams and identifying which features contribute most to revenue.",
+      "Include specific analysis of: CRM, automation, integration, workflow",
+      "Prioritize opportunities that can be executed within 6 months.",
+      "Analyze market penetration in global markets."
+    ],
+    "focusAreas": [
+      "feature_extraction",
+      "pricing_disruption",
+      "segment_analysis",
+      "industry_focus:technology,finance,healthcare"
+    ],
+    "constraints": {
+      "timeline": 6,
+      "investmentRange": ["small", "medium"],
+      "marketSize": ["hundred_million", "billion_plus"],
+      "competition": "low_competition"
+    },
+    "outputRequirements": {
+      "format": "comprehensive-markdown",
+      "sections": [
+        "executive-summary",
+        "detailed-analysis",
+        "recommendations",
+        "grading-matrix",
+        "disruption-roadmap",
+        "investment-analysis"
+      ],
+      "visualizations": true,
+      "exportFormats": ["md", "json", "pdf"],
+      "financialModeling": true
+    }
+  },
+  "gradingConfig": {
+    "weights": {
+      "market_potential": 0.3,
+      "competitive_advantage": 0.35,
+      "implementation_feasibility": 0.2,
+      "strategic_value": 0.15
+    },
+    "thresholds": {
+      "excellent": 8.5,
+      "good": 7.0,
+      "fair": 5.5,
+      "poor": 4.0
+    },
+    "customCriteria": [
+      {
+        "name": "disruption_effectiveness",
+        "weight": 0.15,
+        "description": "Effectiveness of price strategy"
+      }
+    ]
+  },
+  "executionConfig": {
+    "environment": "production",
+    "githubRepo": {
+      "create": true,
+      "name": "salesforce-red-research-20240115",
+      "visibility": "private",
+      "template": "competitive-research-red"
+    },
+    "notifications": {
+      "webhook": "https://hooks.example.com/claude-flow",
+      "email": "research-team@example.com"
+    }
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "id": "sample-black-001",
+  "timestamp": "2024-01-15T11:00:00Z",
+  "team": "black",
+  "templateId": 2,
+  "companyName": "Google",
+  "swarmConfig": {
+    "maxAgents": 10,
+    "timeout": 120,
+    "strategy": "research",
+    "topology": "mesh",
+    "parallel": true,
+    "objective": "Reverse engineer internal tools used by Google to identify cost-saving opportunities",
+    "metadata": {
+      "team": "black",
+      "submissionId": "sample-black-001",
+      "customizations": {
+        "companyName": "Google",
+        "toolCategories": ["data_infrastructure", "dev_tools", "monitoring", "ml_platforms"],
+        "informationSources": {
+          "eng_blogs": true,
+          "patents": true,
+          "github": true,
+          "conferences": true,
+          "job_posts": true,
+          "social_media": false,
+          "podcasts": true,
+          "academic": true
+        },
+        "implementationComplexity": "essential",
+        "teamSizeConstraint": "medium",
+        "techStackPreference": ["python", "go", "cloud_native"],
+        "costComparisonBaseline": "current_vendor",
+        "evidenceThreshold": 3,
+        "existingTools": ["Dataflow", "BigQuery", "Spanner", "Borg"],
+        "timeToMarket": "6_months"
+      }
+    }
+  },
+  "researchConfig": {
+    "baseTemplate": 2,
+    "dynamicPrompts": [
+      "Deep dive into ML/AI infrastructure, including training pipelines and model serving.",
+      "Only include tools with high confidence (4+ independent sources of evidence).",
+      "Compare specifically against these tools: Dataflow, BigQuery, Spanner, Borg"
+    ],
+    "focusAreas": [
+      "data_infrastructure",
+      "dev_tools",
+      "monitoring",
+      "ml_platforms",
+      "sources:eng_blogs,patents,github,conferences,job_posts,podcasts,academic"
+    ],
+    "constraints": {
+      "complexity": "essential",
+      "teamSize": "medium",
+      "techStack": ["python", "go", "cloud_native"],
+      "timeToMarket": "6_months"
+    },
+    "outputRequirements": {
+      "format": "comprehensive-markdown",
+      "sections": [
+        "executive-summary",
+        "detailed-analysis",
+        "recommendations",
+        "grading-matrix",
+        "implementation-blueprint",
+        "cost-comparison"
+      ],
+      "visualizations": true,
+      "exportFormats": ["md", "json", "pdf"],
+      "technicalDiagrams": true
+    }
+  },
+  "gradingConfig": {
+    "weights": {
+      "market_potential": 0.175,
+      "competitive_advantage": 0.25,
+      "implementation_feasibility": 0.375,
+      "strategic_value": 0.2
+    },
+    "thresholds": {
+      "excellent": 8.5,
+      "good": 7.0,
+      "fair": 5.5,
+      "poor": 4.0
+    },
+    "customCriteria": [
+      {
+        "name": "replacement_value",
+        "weight": 0.20,
+        "description": "Value of replacing existing tools"
+      }
+    ]
+  },
+  "executionConfig": {
+    "environment": "production",
+    "githubRepo": {
+      "create": true,
+      "name": "google-black-research-20240115",
+      "visibility": "private",
+      "template": "competitive-research-black"
+    },
+    "notifications": {
+      "webhook": "https://hooks.example.com/claude-flow",
+      "email": "engineering-team@example.com"
+    }
+  }
+}
